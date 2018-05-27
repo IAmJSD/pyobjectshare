@@ -22,3 +22,7 @@ class UnableToSerialise(Exception):
 
 class UnableToDeserialise(Exception):
     pass
+
+
+class PortRequired(Exception):
+    pass
