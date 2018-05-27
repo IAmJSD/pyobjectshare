@@ -26,3 +26,11 @@ class UnableToDeserialise(Exception):
 
 class PortRequired(Exception):
     pass
+
+
+class SendingMethodInvalid(Exception):
+    pass
+
+
+class SendingError(Exception):
+    pass

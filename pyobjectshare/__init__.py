@@ -18,3 +18,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from .exceptions import *
 from .serialisation import *
 from .sending_methods import *
+from .sending_handler import SendingHandler

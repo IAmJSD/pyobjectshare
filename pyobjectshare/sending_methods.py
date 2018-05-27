@@ -24,7 +24,14 @@ from .exceptions import PortRequired
 
 
 class SendingMethod:
-    pass
+    def __init__(self, hostname, port, password, port_required=False):
+        self.hostname = hostname
+        if port is None and port_required:
+            raise PortRequired(
+                "A port is required for this sender."
+            )
+        self.port = port
+        self.password = password
 # A class that all sending methods have to inherit.
 
 
@@ -34,13 +41,12 @@ class TCPSender(SendingMethod):
     # If you want to send something over the internet, use POSTSender.
 
     def __init__(self, hostname, port, password):
-        self.hostname = hostname
-        if port is None:
-            raise PortRequired(
-                "A port is required for this sender."
-            )
-        self.port = port
-        self.password = password
+        super().__init__(
+            hostname,
+            port,
+            password,
+            True
+        )
 
     def send_non_async(self, string):
         sock = socket.socket(
@@ -66,8 +72,12 @@ class POSTSender(SendingMethod):
     # This sends the Python object in a HTTP POST request.
 
     def __init__(self, hostname, port, password):
-        self.hostname = hostname
-        self.password = password
+        super().__init__(
+            hostname,
+            port,
+            password,
+            False
+        )
 
     async def send(self, string):
         async with aiohttp.ClientSession() as session:
