@@ -24,7 +24,7 @@ from .serialisation import serialise
 class SendingHandler:
 
     def __init__(self, method, hostname: str, password=None, port=None):
-        if not isinstance(SendingMethod, method):
+        if not issubclass(method, SendingMethod):
             raise SendingMethodInvalid(
                 'Sending method must inherit "SendingMethod".'
             )

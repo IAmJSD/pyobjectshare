@@ -52,12 +52,12 @@ class TCPSender(SendingMethod):
         sock = socket.socket(
             socket.AF_INET, socket.SOCK_STREAM
         )
-        sock.bind(("", self.port))
+        sock.connect((self.hostname, self.port))
         data_str = json.dumps(
             {"password": self.password, "python_obj": string}
         )
-        sock.sendto(
-            data_str.encode(), (self.hostname, self.port)
+        sock.send(
+            data_str.encode()
         )
 
     async def send(self, string):
