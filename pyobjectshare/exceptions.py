@@ -15,26 +15,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
-import pickle
-from .exceptions import UnableToSerialise, UnableToDeserialise
-# Imports go here.
+
+class UnableToSerialise(Exception):
+    pass
 
 
-def serialise(obj):
-    # Serialises any type of object into a string.
-    try:
-        return pickle.dumps(obj).hex()
-    except BaseException:
-        raise UnableToSerialise(
-            "Unable to serialise the object that was given."
-        )
-
-
-def deserialise(string: str):
-    # De-serialises a serialised string into a object.
-    try:
-        return pickle.loads(bytes.fromhex(string))
-    except BaseException:
-        raise UnableToDeserialise(
-            "Unable to de-serialize the string that was given."
-        )
+class UnableToDeserialise(Exception):
+    pass
