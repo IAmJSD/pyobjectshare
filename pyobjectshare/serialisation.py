@@ -16,6 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import pickle
+import copy
 from .exceptions import UnableToSerialise, UnableToDeserialise
 # Imports go here.
 
@@ -23,7 +24,7 @@ from .exceptions import UnableToSerialise, UnableToDeserialise
 def serialise(obj):
     # Serialises any type of object into a string.
     try:
-        return pickle.dumps(obj).hex()
+        return pickle.dumps(copy.deepcopy(obj)).hex()
     except BaseException:
         raise UnableToSerialise(
             "Unable to serialise the object that was given."
