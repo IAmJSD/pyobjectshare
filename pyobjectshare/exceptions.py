@@ -32,5 +32,9 @@ class SendingMethodInvalid(Exception):
     pass
 
 
+class ReceivingMethodInvalid(Exception):
+    pass
+
+
 class SendingError(Exception):
     pass
