@@ -29,7 +29,7 @@ class ReceivingHandler:
     ):
         if not issubclass(method, ReceivingMethod):
             raise ReceivingMethodInvalid(
-                'Sending method must inherit "SendingMethod".'
+                'Receiving method must inherit "ReceivingMethod".'
             )
         if port:
             port = int(port)
