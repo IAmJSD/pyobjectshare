@@ -17,6 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import asyncio
 import aiohttp
+import socket
+import json
 from .exceptions import PortRequired, UnableToDeserialise
 from .serialisation import deserialise
 # Imports go here.
@@ -78,6 +80,58 @@ class HTTPReceiver(ReceivingMethod):
             webserver.make_handler(), "0.0.0.0", self.port
         )
         self.loop.run_until_complete(x)
+        try:
+            self.loop.run_forever()
+        except KeyboardInterrupt:
+            pass
+
+
+class TCPReceiver(ReceivingMethod):
+    # This sends the Python object over TCP.
+    # This is NOT secure for across the internet (meant for LAN).
+    # If you want to send something over the internet, use POSTSender.
+
+    def __init__(self, callback, loop, port, passwords):
+        super().__init__(
+            callback,
+            loop,
+            port,
+            passwords,
+            True
+        )
+
+    @staticmethod
+    def non_async_recv():
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(("", 4232))
+        s.listen(1)
+        conn = s.accept()[0]
+        data = conn.recv(1024)
+        return data
+
+    async def run_task(self):
+        while True:
+            data = await self.loop.run_in_executor(
+                None,
+                self.non_async_recv
+            )
+            try:
+                _j = json.loads(
+                    data.decode()
+                )
+                cont = True
+                if self.passwords:
+                    if "password" not in _j or _j["password"] not in self.passwords:
+                       cont = False
+                if cont:
+                    await self.callback(
+                        deserialise(_j["python_obj"])
+                    )
+            except BaseException:
+                pass
+
+    def run(self):
+        self.loop.create_task(self.run_task())
         try:
             self.loop.run_forever()
         except KeyboardInterrupt:
