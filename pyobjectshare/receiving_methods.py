@@ -131,8 +131,4 @@ class TCPReceiver(ReceivingMethod):
                 pass
 
     def run(self):
-        self.loop.create_task(self.run_task())
-        try:
-            self.loop.run_forever()
-        except KeyboardInterrupt:
-            pass
+        self.loop.run_until_complete(self.run_task())
