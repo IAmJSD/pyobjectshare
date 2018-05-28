@@ -16,7 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import asyncio
-import aiohttp
+import aiohttp.web
 import socket
 import json
 from .exceptions import PortRequired, UnableToDeserialise
